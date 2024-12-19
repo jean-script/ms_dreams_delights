@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ms_dreams_delights/app/modules/revenues/domain/entities/revenues_entity.dart';
 import 'package:ms_dreams_delights/app/modules/revenues/domain/usecases/revenues_created_usecase.dart';
 import 'package:ms_dreams_delights/app/modules/revenues/domain/usecases/revenues_delete_usecase.dart';
+import 'package:ms_dreams_delights/app/modules/revenues/domain/usecases/revenues_edit_usecase.dart';
+import 'package:ms_dreams_delights/app/modules/revenues/domain/usecases/revenues_favorite_usecase.dart';
 import 'package:ms_dreams_delights/app/modules/revenues/domain/usecases/revenues_get_usecase.dart';
 import 'package:ms_dreams_delights/app/modules/revenues/presenter/widgets/bottom_sheet_revenues_add_ingredient.dart';
 import 'package:ms_dreams_delights/app/modules/stock/domain/entities/ingredient_dto.dart';
@@ -15,6 +17,8 @@ class RevenuesController extends GetxController
     with StateMixin<List<RevenuesDTO>> {
   final IRevenuesGetUsecase _getUsecase;
   final IRevenuesCreatedUsecase _createdUsecase;
+  final IRevenuesEditUsecase _editUsecase;
+  final IRevenuesFavoriteUsecase _favoriteUsecase;
   final IRevenuesDeleteUsecase _deleteUsecase;
 
   final TextEditingController textSearch = TextEditingController();
@@ -26,6 +30,8 @@ class RevenuesController extends GetxController
   final TextEditingController amountController = TextEditingController();
   final TextEditingController totalValueController = TextEditingController();
   final imageSelected = XFile('').obs;
+  final isFavorite = false.obs;
+  final idSelected = ''.obs;
 
   final RxList<IngredientDTO> _listIngredientes = <IngredientDTO>[].obs;
   final RxList<IngredientDTO> _listIngreisAdd = <IngredientDTO>[].obs;
@@ -45,8 +51,8 @@ class RevenuesController extends GetxController
 
   bool isEdit = false;
 
-  RevenuesController(
-      this._getUsecase, this._createdUsecase, this._deleteUsecase);
+  RevenuesController(this._getUsecase, this._createdUsecase,
+      this._deleteUsecase, this._editUsecase, this._favoriteUsecase);
 
   @override
   void onInit() async {
@@ -96,16 +102,12 @@ class RevenuesController extends GetxController
     }
   }
 
-  Future<void> onEdit() async {
+  Future<void> onFavorite(bool favorite) async {
     try {
-      change(null, status: RxStatus.loading());
-      var r = await _createdUsecase(RevenuesCreatedDTO(
-        title: titleController.text,
-        description: descriptionController.text,
-        amount: (int.tryParse(amountController.text) ?? 0),
-        totalValue: (double.tryParse(totalValueController.text) ?? 0),
-        ingredients: _listIngredientes,
-        image: base64String(await imageSelected.value.readAsBytes()),
+      // change(null, status: RxStatus.loading());
+      var r = await _favoriteUsecase(RevenuesIsFavoriteDTO(
+        id: idSelected.value,
+        favorite: favorite,
       ));
 
       r.fold((l) {
@@ -114,7 +116,41 @@ class RevenuesController extends GetxController
         Get.showSnackbar(const GetSnackBar(
           snackPosition: SnackPosition.TOP,
           duration: Duration(seconds: 2),
-          title: "Error ao Salvar Receita",
+          title: "Error ao Editar Receita",
+          message: "Tente outra vez",
+        ));
+        return;
+      }, (res) {
+        getRevenues();
+        Get.back();
+        cleanForm();
+      });
+    } catch (e) {
+      print('my error supreme - -$e');
+    }
+  }
+
+  Future<void> onEdit() async {
+    try {
+      change(null, status: RxStatus.loading());
+      var r = await _editUsecase(RevenuesEditDTO(
+        id: idSelected.value,
+        title: titleController.text,
+        description: descriptionController.text,
+        amount: (int.tryParse(amountController.text) ?? 0),
+        totalValue: (double.tryParse(totalValueController.text) ?? 0),
+        ingredients: _listIngredientes,
+        image: base64String(await imageSelected.value.readAsBytes()),
+        favorite: isFavorite.value,
+      ));
+
+      r.fold((l) {
+        change(null, status: RxStatus.success());
+        print('error -- ${l.message}');
+        Get.showSnackbar(const GetSnackBar(
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 2),
+          title: "Error ao Editar Receita",
           message: "Tente outra vez",
         ));
         return;
@@ -130,12 +166,15 @@ class RevenuesController extends GetxController
 
   void editRevenues(RevenuesDTO dto) async {
     isEdit = true;
+    idSelected.value = dto.id;
     titleController.text = dto.title;
     descriptionController.text = dto.description;
     amountController.text = dto.amount.toString();
     totalValueController.text = dto.totalValue.toString();
     _listIngredientes.addAll(dto.ingredients);
     revenuesDetail = dto;
+    isFavorite.value = dto.favorite.value;
+    imageSelected.value = XFile.fromData(dataFromBase64String(dto.image));
   }
 
   void closePage() {
@@ -219,24 +258,9 @@ class RevenuesController extends GetxController
   }
 
   void favorite(RevenuesDTO revenue) async {
-    List<RevenuesDTO> revenuesX = [];
-    print('initial');
-    if (box.hasData('revenues')) {
-      List<dynamic> r = await box.read('revenues');
-      revenuesX = r.map((i) => RevenuesDTO.fromMap(i, i['id'])).toList();
-      if (revenuesX.contains(revenue)) {
-        revenue.favorite.value = false;
-        revenuesX.remove(revenue);
-        print('removeu');
-      } else {
-        print('add');
-        revenue.favorite.value = true;
-        revenuesX.add(revenue);
-      }
-    }
-
-    await box.write(
-        'revenues', revenuesX.map((e) => RevenuesDTO.toMapWithId(e)).toList());
+    idSelected.value = revenue.id;
+    imageSelected.value = XFile.fromData(dataFromBase64String(revenue.image));
+    onFavorite(!revenue.favorite.value);
   }
 
   List<IngredientDTO> listIngredientesFilter() {

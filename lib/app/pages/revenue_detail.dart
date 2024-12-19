@@ -16,6 +16,7 @@ class RevenueDetail extends GetView<RevenuesController> {
     var revenue = controller.revenuesDetail!;
     print('revenues -- ${revenue.ingredients.length}');
     return MyScaffold(
+      
       showFloatingAction: false,
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(

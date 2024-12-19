@@ -129,6 +129,87 @@ class RevenuesDTO {
   }
 }
 
+class RevenuesIsFavoriteDTO {
+  final String id;
+  final bool favorite;
+  RevenuesIsFavoriteDTO({
+    required this.id,
+    required this.favorite,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'favorite': favorite,
+    };
+  }
+
+  factory RevenuesIsFavoriteDTO.fromMap(Map<String, dynamic> map) {
+    return RevenuesIsFavoriteDTO(
+      id: map['id'] as String,
+      favorite: map['favorite'] as bool,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory RevenuesIsFavoriteDTO.fromJson(String source) => RevenuesIsFavoriteDTO.fromMap(json.decode(source) as Map<String, dynamic>);
+}
+
+class RevenuesEditDTO {
+  final String id;
+  final String? image;
+  final String title;
+  final String description;
+  final int amount;
+  final double totalValue;
+  final List<IngredientDTO> ingredients;
+  final bool favorite;
+  RevenuesEditDTO({
+    required this.id,
+     this.image,
+    required this.title,
+    required this.description,
+    required this.amount,
+    required this.totalValue,
+    required this.ingredients,
+    required this.favorite,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      // 'id': id,
+      'image': image,
+      'title': title,
+      'description': description,
+      'amount': amount,
+      'totalValue': totalValue,
+      'ingredients': ingredients.map((x) => IngredientDTO.toMapWithID(x)).toList(),
+      'favorite': favorite,
+    };
+  }
+
+  factory RevenuesEditDTO.fromMap(Map<String, dynamic> map) {
+    return RevenuesEditDTO(
+      id: map['id'] as String,
+      image: map['image'] as String,
+      title: map['title'] as String,
+      description: map['description'] as String,
+      amount: map['amount'] as int,
+      totalValue: map['totalValue'] as double,
+      ingredients: (map['ingredients'] as List<Map<String, dynamic>>)
+          .map(
+            (item) => IngredientDTO.fromMap(item, item['id']),
+          )
+          .toList(),
+      favorite: map['favorite'] as bool,
+    );
+  }
+
+  factory RevenuesEditDTO.fromJson(String source) =>
+      RevenuesEditDTO.fromMap(json.decode(source) as Map<String, dynamic>);
+}
+
 class RevenuesCreatedDTO {
   final String image;
   final String title;

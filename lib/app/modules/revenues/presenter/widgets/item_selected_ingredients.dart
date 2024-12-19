@@ -47,7 +47,12 @@ class ItemSelectedIngredients extends GetView<RevenuesController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                item.totalValueCost.value.currency,
+                item.amountUseRevenues != null
+                    ? ((double.tryParse(item.amountUseRevenues.toString()) ??
+                                0) *
+                            item.totalValueCost.value)
+                        .currency
+                    : item.totalValueCost.value.currency,
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: MyTheme.positive,
                     ),

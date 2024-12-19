@@ -182,11 +182,19 @@ class BottomSheetRevenuesAddIngredient extends GetView<RevenuesController> {
                                           height: 48,
                                         ),
                                         const SizedBox(width: 2),
-                                        Text(
-                                          item.title,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelSmall,
+                                        ConstrainedBox(
+                                          constraints: const BoxConstraints(
+                                            maxWidth: 150,
+                                          ),
+                                          child: FittedBox(
+                                            child: Text(
+                                              item.title,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .labelSmall,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
