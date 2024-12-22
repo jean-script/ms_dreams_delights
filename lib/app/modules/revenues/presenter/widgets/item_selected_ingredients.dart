@@ -3,19 +3,21 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:ms_dreams_delights/app/extensions/double_extension.dart';
 import 'package:ms_dreams_delights/app/modules/revenues/presenter/controllers/revenues_controlle.dart';
+import 'package:ms_dreams_delights/app/modules/revenues/presenter/controllers/revenues_selected_controller.dart';
 import 'package:ms_dreams_delights/app/modules/stock/domain/entities/ingredient_dto.dart';
 import 'package:ms_dreams_delights/app/theme/theme.dart';
+import 'package:ms_dreams_delights/app/utils/hexcolor.dart';
 import 'package:ms_dreams_delights/app/widgets/image.dart';
 
-class ItemSelectedIngredients extends GetView<RevenuesController> {
+class ItemSelectedIngredients extends GetView<RevenuesSelectedController> {
   const ItemSelectedIngredients({
     super.key,
     required this.item,
-    this.readOnly = false,
+    this.detail = false,
   });
 
   final IngredientDTO item;
-  final bool readOnly;
+  final bool detail;
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +33,53 @@ class ItemSelectedIngredients extends GetView<RevenuesController> {
         children: [
           Row(
             children: [
-              ImageWidget(
-                '',
-                imagePath: item.pathImage,
-                width: 70,
-                height: 48,
+              if (detail)
+                GestureDetector(
+                  onTap: !detail
+                      ? null
+                      : () {
+                          print('sou detalhe');
+                          controller.addIngredientDone(item);
+                        },
+                  child: Container(
+                    // padding: const EdgeInsets.all(8.0),
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: controller.listDoneIngredients.contains(item)
+                            ? MyTheme.positive
+                            : HexColor('#D0CDCD'),
+                      ),
+                      color: controller.listDoneIngredients.contains(item)
+                          ? MyTheme.positive
+                          : null,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: const Icon(
+                      Icons.check,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              const SizedBox(width: 3),
+              Opacity(
+                opacity:
+                    controller.listDoneIngredients.contains(item) ? 0.6 : 1.0,
+                child: ImageWidget(
+                  '',
+                  imagePath: item.pathImage,
+                  width: 70,
+                  height: 48,
+                ),
               ),
               Text(
                 item.title,
-                style: Theme.of(context).textTheme.labelSmall,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: controller.listDoneIngredients.contains(item)
+                          ? Colors.grey.shade400
+                          : null,
+                    ),
               ),
             ],
           ),
@@ -54,14 +94,18 @@ class ItemSelectedIngredients extends GetView<RevenuesController> {
                         .currency
                     : item.totalValueCost.value.currency,
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: MyTheme.positive,
+                      color: controller.listDoneIngredients.contains(item)
+                          ? Colors.grey.shade400
+                          : MyTheme.positive,
                     ),
               ),
               if (item.amountUseRevenues != null)
                 Text(
                   '${item.amountUseRevenues?.toStringAsFixed(0)} ${item.measurement?.name}',
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: MyTheme.positive,
+                        color: controller.listDoneIngredients.contains(item)
+                            ? Colors.grey.shade400
+                            : MyTheme.positive,
                       ),
                 ),
             ],
@@ -69,7 +113,7 @@ class ItemSelectedIngredients extends GetView<RevenuesController> {
         ],
       ),
     );
-    return readOnly
+    return detail
         ? itemContainer
         : Slidable(
             key: ValueKey(item.id),
@@ -79,14 +123,14 @@ class ItemSelectedIngredients extends GetView<RevenuesController> {
 
               // A pane can dismiss the Slidable.
               dismissible: DismissiblePane(onDismissed: () {
-                controller.removeItemInListingredien(item);
+                RevenuesController.to.removeItemInListingredien(item);
               }),
               // All actions are defined in the children parameter.
               children: [
                 // A SlidableAction can have an icon and/or a label.
                 SlidableAction(
                   onPressed: (context) {
-                    controller.removeItemInListingredien(item);
+                    RevenuesController.to.removeItemInListingredien(item);
                   },
                   backgroundColor: const Color(0xFFFE4A49),
                   foregroundColor: Colors.white,

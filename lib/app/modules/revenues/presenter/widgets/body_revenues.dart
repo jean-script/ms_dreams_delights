@@ -46,9 +46,8 @@ class BodyRevenues extends GetView<RevenuesController> {
                         var item = controller.listFilter()[index];
                         return ItemRevenues(item: item);
                       },
-                      separatorBuilder: (context, index) => const SizedBox(
-                            height: 10,
-                          ),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 10),
                       itemCount: controller.listFilter().length),
                 ),
               ),

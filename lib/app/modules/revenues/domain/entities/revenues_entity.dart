@@ -88,7 +88,8 @@ class RevenuesDTO {
           .map(
             (item) => IngredientDTO.fromMap(item, item['id']),
           )
-          .toList(),
+          .toList()
+          ,
       favorite: (map['favorite'] as bool).obs,
     );
   }
@@ -153,7 +154,9 @@ class RevenuesIsFavoriteDTO {
 
   String toJson() => json.encode(toMap());
 
-  factory RevenuesIsFavoriteDTO.fromJson(String source) => RevenuesIsFavoriteDTO.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory RevenuesIsFavoriteDTO.fromJson(String source) =>
+      RevenuesIsFavoriteDTO.fromMap(
+          json.decode(source) as Map<String, dynamic>);
 }
 
 class RevenuesEditDTO {
@@ -167,7 +170,7 @@ class RevenuesEditDTO {
   final bool favorite;
   RevenuesEditDTO({
     required this.id,
-     this.image,
+    this.image,
     required this.title,
     required this.description,
     required this.amount,
@@ -184,7 +187,8 @@ class RevenuesEditDTO {
       'description': description,
       'amount': amount,
       'totalValue': totalValue,
-      'ingredients': ingredients.map((x) => IngredientDTO.toMapWithID(x)).toList(),
+      'ingredients':
+          ingredients.map((x) => IngredientDTO.toMapWithID(x)).toList(),
       'favorite': favorite,
     };
   }
@@ -201,7 +205,8 @@ class RevenuesEditDTO {
           .map(
             (item) => IngredientDTO.fromMap(item, item['id']),
           )
-          .toList(),
+          .toList()
+          ,
       favorite: map['favorite'] as bool,
     );
   }
@@ -233,7 +238,7 @@ class RevenuesCreatedDTO {
     String? description,
     int? amount,
     double? totalValue,
-    List<IngredientDTO>? ingredients,
+    RxList<IngredientDTO>? ingredients,
     bool? favorite,
   }) {
     return RevenuesCreatedDTO(
@@ -270,7 +275,8 @@ class RevenuesCreatedDTO {
           .map(
             (item) => IngredientDTO.fromMap(item, item['id']),
           )
-          .toList(),
+          .toList()
+          ,
       // favorite: map['favorite'] as bool,
     );
   }

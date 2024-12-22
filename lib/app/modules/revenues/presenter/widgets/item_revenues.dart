@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ms_dreams_delights/app/extensions/double_extension.dart';
 import 'package:ms_dreams_delights/app/modules/revenues/domain/entities/revenues_entity.dart';
 import 'package:ms_dreams_delights/app/modules/revenues/presenter/controllers/revenues_controlle.dart';
+import 'package:ms_dreams_delights/app/modules/revenues/presenter/controllers/revenues_selected_controller.dart';
 import 'package:ms_dreams_delights/app/routes/routes.dart';
 import 'package:ms_dreams_delights/app/utils/hexcolor.dart';
 import 'package:ms_dreams_delights/app/widgets/image.dart';
@@ -72,8 +73,8 @@ class ItemRevenues extends GetView<RevenuesController> {
       // ),
       child: GestureDetector(
         onTap: () {
+          Get.lazyPut(() => RevenuesSelectedController(item));
           controller.revenuesDetail = item;
-          print('CLIQUEI -- ${item.ingredients.length}');
           Get.toNamed(MyRoutes.REVENUES_DETAIL_PAGE);
         },
         child: Container(

@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:ms_dreams_delights/app/components/my_scaffold.dart';
 import 'package:ms_dreams_delights/app/extensions/double_extension.dart';
-import 'package:ms_dreams_delights/app/modules/revenues/presenter/controllers/revenues_controlle.dart';
+import 'package:ms_dreams_delights/app/modules/revenues/presenter/controllers/revenues_selected_controller.dart';
 import 'package:ms_dreams_delights/app/modules/revenues/presenter/widgets/item_selected_ingredients.dart';
+import 'package:ms_dreams_delights/app/theme/theme.dart';
 import 'package:ms_dreams_delights/app/widgets/image.dart';
 
-class RevenueDetail extends GetView<RevenuesController> {
-  const RevenueDetail({
-    super.key,
-  });
+class RevenueDetail extends GetView<RevenuesSelectedController> {
+  const RevenueDetail({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var revenue = controller.revenuesDetail!;
-    print('revenues -- ${revenue.ingredients.length}');
+    var revenue = controller.revenuesDetail;
     return MyScaffold(
-      
       showFloatingAction: false,
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
@@ -77,21 +75,65 @@ class RevenueDetail extends GetView<RevenuesController> {
                           fontSize: 24,
                         ),
                   ),
-                  if (revenue.ingredients.isEmpty) const Text("ESTOU VAZIO"),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 500,
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 10),
-                      itemCount: revenue.ingredients.length,
-                      itemBuilder: (_, index) {
-                        var item = revenue.ingredients[index];
-                        return ItemSelectedIngredients(
-                          item: item,
-                          readOnly: true,
-                        );
-                      },
+                  if (revenue.ingredients.isEmpty)
+                    const Text("ESTOU VAZIO \\\\(°0°)//"),
+                  Obx(
+                    () => SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: controller.listIngrediente().isEmpty
+                          ? 100
+                          : controller.listIngrediente().length * 80,
+                      child: ListView.separated(
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 10),
+                        itemCount: controller.listIngrediente().length,
+                        itemBuilder: (_, index) {
+                          var item = controller.listIngrediente()[index];
+                          return ItemSelectedIngredients(
+                            item: item,
+                            detail: true,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Obx(
+                    () => Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (controller.listDoneIngredients.isNotEmpty)
+                          Text(
+                            'Adicionados',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  fontSize: 24,
+                                  color: MyTheme.positive,
+                                ),
+                          ),
+                        if (controller.listDoneIngredients.isNotEmpty)
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: controller.listDoneIngredients.isEmpty
+                                ? 100
+                                : controller.listDoneIngredients.length * 70,
+                            child: ListView.separated(
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 10),
+                              itemCount: controller.listDoneIngredients.length,
+                              itemBuilder: (_, index) {
+                                var item =
+                                    controller.listDoneIngredients[index];
+                                return ItemSelectedIngredients(
+                                  item: item,
+                                  detail: true,
+                                );
+                              },
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 100),
