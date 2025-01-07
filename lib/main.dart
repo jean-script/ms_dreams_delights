@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:device_preview_plus/device_preview_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -29,13 +32,16 @@ void main() async {
   });
 
   PlatformDispatcher.instance.onError = (error, stack) {
-    print('PlatformDispatcher.instance.onError');
-    print(error.toString());
-    print(stack.toString());
+    log('PlatformDispatcher.instance.onError');
+    log(error.toString(), stackTrace: stack);
     return true;
   };
 
-  runApp(const MyApp());
+  DevicePreview(
+    enabled: !kReleaseMode,
+    builder: (context) => const MyApp(), // Wrap your app
+  );
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -48,7 +54,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: MyTheme.get(context),
       getPages: MyRoutes.get(),
-      builder: (context, child) => child!,
+      // builder: (context, child) => child!,
+      builder: DevicePreview.appBuilder,
       locale: const Locale('pt', 'BR'),
       initialBinding: InitialBinder(),
     );
