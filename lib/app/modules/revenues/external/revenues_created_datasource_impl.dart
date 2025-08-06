@@ -12,19 +12,22 @@ class RevenuesCreatedDatasourceImpl implements IRevenuesCreatedDatasource {
     try {
       var r = await MyFirebaseIntence.firestore
           .collection(MyCollection.COLLECTION_REVENUES)
-          .add(RevenuesDTO.toMap(dto));
+          .add(
+            RevenuesDTO.toMap(dto),
+          );
 
       print('MINHA LISTA ${dto.ingredients.length}');
 
       return RevenuesDTO(
-          id: r.id,
-          image: dto.image,
-          title: dto.title,
-          description: dto.description,
-          amount: dto.amount,
-          totalValue: dto.totalValue,
-          ingredients: dto.ingredients,
-          favorite: (dto.favorite).obs);
+        id: r.id,
+        image: dto.image,
+        title: dto.title,
+        description: dto.description,
+        amount: dto.amount,
+        totalValue: dto.totalValue,
+        ingredients: dto.ingredients,
+        favorite: (dto.favorite).obs,
+      );
     } on Exception catch (e) {
       print('MY ERROR -- ${e.toString()}');
       var isOn = await isOnline();
