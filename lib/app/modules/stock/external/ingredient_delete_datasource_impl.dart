@@ -8,10 +8,10 @@ class IngredientDeleteDatasourceImpl implements IIngredientDeleteDatasource {
   @override
   Future<void> call(String id) async {
     try {
-      await MyFirebaseIntence.firestore
-          .collection(MyCollection.COLLECTION_INGREDIENTE)
-          .doc(id)
-          .delete();
+      // await MyFirebaseIntence.firestore
+      //     .collection(MyCollection.COLLECTION_INGREDIENTE)
+      //     .doc(id)
+      //     .delete();
     } on Exception catch (e) {
       print(e.toString());
       var isOn = await isOnline();

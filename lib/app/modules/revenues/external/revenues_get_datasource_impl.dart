@@ -10,15 +10,15 @@ class RevenuesGetDatasourceImpl extends IRevenuesGetDatasource {
   Future<List<RevenuesDTO>> call() async {
     List<RevenuesDTO> list = [];
     try {
-      await MyFirebaseIntence.firestore
-          .collection(MyCollection.COLLECTION_REVENUES)
-          .get()
-          .then((event) {
-        for (var doc in event.docs) {
-          list.add(RevenuesDTO.fromMap(doc.data(), doc.id));
-          print("${doc.id} => ${doc.data()}");
-        }
-      });
+      // await MyFirebaseIntence.firestore
+      //     .collection(MyCollection.COLLECTION_REVENUES)
+      //     .get()
+      //     .then((event) {
+      //   for (var doc in event.docs) {
+      //     list.add(RevenuesDTO.fromMap(doc.data(), doc.id));
+      //     print("${doc.id} => ${doc.data()}");
+      //   }
+      // });
 
       return list;
     } on Exception catch (e) {

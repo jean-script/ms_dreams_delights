@@ -10,10 +10,10 @@ class RevenuesEditDatasourceImpl implements IRevenuesEditDatasource {
   @override
   Future<RevenuesDTO> call(RevenuesEditDTO dto) async {
     try {
-      await MyFirebaseIntence.firestore
-          .collection(MyCollection.COLLECTION_REVENUES)
-          .doc(dto.id)
-          .set(dto.toMap());
+      // await MyFirebaseIntence.firestore
+      //     .collection(MyCollection.COLLECTION_REVENUES)
+      //     .doc(dto.id)
+      //     .set(dto.toMap());
 
       print('MINHA LISTA ${dto.ingredients.length}');
 

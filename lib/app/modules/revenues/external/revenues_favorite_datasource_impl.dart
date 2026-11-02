@@ -9,10 +9,10 @@ class RevenuesFavoriteDatasourceImpl implements IRevenuesFavoriteDatasource {
   @override
   Future<void> call(RevenuesIsFavoriteDTO dto) async {
     try {
-      await MyFirebaseIntence.firestore
-          .collection(MyCollection.COLLECTION_REVENUES)
-          .doc(dto.id)
-          .update(dto.toMap());
+      // await MyFirebaseIntence.firestore
+      //     .collection(MyCollection.COLLECTION_REVENUES)
+      //     .doc(dto.id)
+      //     .update(dto.toMap());
     } on Exception catch (e) {
       print('MY ERROR -- ${e.toString()}');
       var isOn = await isOnline();

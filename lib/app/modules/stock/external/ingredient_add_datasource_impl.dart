@@ -24,11 +24,12 @@ class IngredientAddDatasourceImpl implements IIngredientAddDatasource {
       // String img = base64Encode(myImageBytes!);
       // print('mys bytes -- $img');
 
-      var value = await (MyFirebaseIntence.firestore
-          .collection(MyCollection.COLLECTION_INGREDIENTE)
-          .add(IngredientDTO.toMap(dto)));
+      // var value = await (MyFirebaseIntence.firestore
+      //     .collection(MyCollection.COLLECTION_INGREDIENTE)
+      //     .add(IngredientDTO.toMap(dto)));
 
-      return dto.copyWith(id: value.id);
+      return dto;
+      // .copyWith(id: value.id);
     } on Exception catch (e) {
       print(e.toString());
       var isOn = await isOnline();

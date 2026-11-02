@@ -10,14 +10,16 @@ class RevenuesCreatedDatasourceImpl implements IRevenuesCreatedDatasource {
   @override
   Future<RevenuesDTO> call(RevenuesCreatedDTO dto) async {
     try {
-      var r = await MyFirebaseIntence.firestore
-          .collection(MyCollection.COLLECTION_REVENUES)
-          .add(RevenuesDTO.toMap(dto));
+      // var r = ;
+      // await MyFirebaseIntence.firestore
+      //     .collection(MyCollection.COLLECTION_REVENUES)
+      //     .add(RevenuesDTO.toMap(dto));
 
       print('MINHA LISTA ${dto.ingredients.length}');
 
       return RevenuesDTO(
-          id: r.id,
+          // id: r.id,
+          id: '',
           image: dto.image,
           title: dto.title,
           description: dto.description,

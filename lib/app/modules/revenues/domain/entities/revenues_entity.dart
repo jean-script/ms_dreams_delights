@@ -15,6 +15,7 @@ class RevenuesDTO {
   final double totalValue;
   final List<IngredientDTO> ingredients;
   RxBool favorite = false.obs;
+  
   RevenuesDTO({
     required this.id,
     required this.image,

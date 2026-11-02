@@ -8,10 +8,10 @@ class RevenuesDeleteDatasourceImpl extends IRevenuesDeleteDatasource {
   @override
   Future<void> call(String id) async {
     try {
-      await MyFirebaseIntence.firestore
-          .collection(MyCollection.COLLECTION_REVENUES)
-          .doc(id)
-          .delete();
+      // await MyFirebaseIntence.firestore
+      //     .collection(MyCollection.COLLECTION_REVENUES)
+      //     .doc(id)
+      //     .delete();
     } on Exception catch (e) {
       print(e.toString());
       var isOn = await isOnline();

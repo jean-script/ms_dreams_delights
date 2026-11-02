@@ -10,15 +10,15 @@ class IngredientGetDatasourceImpl implements IIngredientGetDatasource {
   Future<List<IngredientDTO>> call() async {
     List<IngredientDTO> list = [];
     try {
-      await MyFirebaseIntence.firestore
-          .collection(MyCollection.COLLECTION_INGREDIENTE)
-          .get()
-          .then((event) {
-        for (var doc in event.docs) {
-          list.add(IngredientDTO.fromMap(doc.data(), doc.id));
-          print("${doc.id} => ${doc.data()}");
-        }
-      });
+      // await MyFirebaseIntence.firestore
+      //     .collection(MyCollection.COLLECTION_INGREDIENTE)
+      //     .get()
+      //     .then((event) {
+      //   for (var doc in event.docs) {
+      //     list.add(IngredientDTO.fromMap(doc.data(), doc.id));
+      //     print("${doc.id} => ${doc.data()}");
+      //   }
+      // });
 
       return list;
     } on Exception catch (e) {

@@ -1,7 +1,7 @@
 
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MyFirebaseIntence {
-  static FirebaseFirestore firestore = FirebaseFirestore.instance;
-}
+// class MyFirebaseIntence {
+//   static FirebaseFirestore firestore = FirebaseFirestore.instance;
+// }

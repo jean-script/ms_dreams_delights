@@ -10,10 +10,10 @@ class IngredientEditDatasourceImpl implements IIngredienteEditDatasource {
   Future<IngredientDTO> call(IngredientDTO dto) async {
     try {
       print(dto.toString());
-      await MyFirebaseIntence.firestore
-          .collection(MyCollection.COLLECTION_INGREDIENTE)
-          .doc(dto.id)
-          .update(IngredientDTO.toMap(dto));
+      // await MyFirebaseIntence.firestore
+      //     .collection(MyCollection.COLLECTION_INGREDIENTE)
+      //     .doc(dto.id)
+      //     .update(IngredientDTO.toMap(dto));
 
       return dto;
     } on Exception catch (e) {
